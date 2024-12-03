@@ -1,0 +1,174 @@
+/* Styles globaux */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f7f7f7, #fefefe); /* Fond plus neutre */
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #4a90e2; /* Bleu doux */
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+}
+
+/* Barre de recherche */
+.search-bar {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+#search {
+    width: 50%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 50px;
+    box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.1), inset -3px -3px 5px rgba(255, 255, 255, 0.7);
+    transition: all 0.3s ease;
+    background: #f0f4ff;
+}
+
+#search:hover {
+    width: 60%;
+    transition: all 0.4s ease;
+}
+
+#search:focus {
+    outline: none;
+    box-shadow: inset 1px 1px 3px rgba(0, 0, 0, 0.2), 0 0 8px rgba(74, 144, 226, 0.4);
+}
+
+/* Section tableau */
+.client-table {
+    margin: 2rem auto;
+    padding: 2rem;
+    max-width: 90%;
+    background: #ffffff;
+    border-radius: 25px; /* Bordures globales pour la carte du tableau */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1), 0 -5px 10px rgba(255, 255, 255, 0.7);
+    overflow-x: auto;
+}
+
+.client-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.client-table th, 
+.client-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* En-têtes du tableau */
+.client-table th {
+    background: #dfe7f1;
+    color: #333;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 0.9rem;
+    border-radius: 0; /* Pas de bordure arrondie par défaut */
+}
+
+/* Bordures arrondies spécifiques */
+.client-table th:first-child {
+    border-radius: 15px 0 0 15px; /* Pour l'en-tête "ID" */
+}
+
+.client-table th:last-child {
+    border-radius: 0 15px 15px 0; /* Pour l'en-tête "Action" */
+}
+
+.client-table td {
+    background: #f9f9f9;
+    color: #333;
+    font-size: 0.9rem;
+    border-radius: 10px;
+}
+
+.client-table tr:hover td {
+    background: #f2f6fb; /* Couleur douce au survol */
+    transition: background 0.3s;
+}
+
+/* Espacement du bouton "Ajouter un client" */
+#add-client {
+    display: inline-block;
+    margin-bottom: 1rem;
+    margin-left: 2rem;
+}
+
+/* Boutons */
+.client-table button {
+    background: linear-gradient(145deg, #6cace4, #557cb5); /* Ton plus doux */
+    color: white;
+    padding: 0.7rem 1rem;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.2), -3px -3px 8px rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.client-table button:hover {
+    background: linear-gradient(145deg, #557cb5, #6cace4);
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+}
+
+/* Boîtes de dialogue futuristes */
+dialog {
+    border: none;
+    border-radius: 25px;
+    padding: 2rem;
+    width: 40%;
+    max-width: 500px;
+    background: linear-gradient(145deg, #e6f0ff, #ffffff);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.2), -10px -10px 20px rgba(255, 255, 255, 0.8);
+    font-size: 1rem;
+    color: #333;
+    position: relative;
+}
+
+dialog::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+dialog form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+dialog input, dialog select, dialog textarea {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    box-shadow: inset 3px 3px 5px rgba(0, 0, 0, 0.1), inset -3px -3px 5px rgba(255, 255, 255, 0.7);
+}
+
+dialog button {
+    background: linear-gradient(145deg, #557cb5, #6cace4);
+    color: white;
+    padding: 0.8rem 1.2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+dialog button:hover {
+    background: linear-gradient(145deg, #6cace4, #557cb5);
+    box-shadow: 0 0 15px rgba(74, 144, 226, 0.5);
+}
