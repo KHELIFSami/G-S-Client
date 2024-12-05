@@ -1,177 +1,150 @@
-// Sélectionner les éléments du DOM
-const clientTableBody = document.getElementById('clientTableBody');
-const addClientDialog = document.getElementById('addClientDialog');
-const addClientForm = document.getElementById('addClientForm');
-const addClientBtn = document.getElementById('addClientBtn');
-const closeDialog = document.getElementById('closeDialog');
-const searchInput = document.getElementById('search');
+// Sélection des éléments du DOM
+const clientTableBody = document.getElementById("clientTableBody");
+const addClientDialog = document.getElementById("addClientDialog");
+const editClientDialog = document.getElementById("editClientDialog");
+const addClientForm = document.getElementById("addClientForm");
+const editClientForm = document.getElementById("editClientForm");
+const addClientBtn = document.getElementById("addClientBtn");
+const closeAddDialog = document.getElementById("closeAddDialog");
+const closeEditDialog = document.getElementById("closeEditDialog");
 
-// Charger les clients depuis le localStorage
-let clients = JSON.parse(localStorage.getItem('clients')) || [];
+let clients = JSON.parse(localStorage.getItem("clients")) || [];
 let clientIdCounter = clients.length > 0 ? clients[clients.length - 1].id + 1 : 1;
 
+saveClientsToLocalStorage();
+renderClients();
+
 // Ouvrir le formulaire d'ajout
-addClientBtn.addEventListener('click', () => addClientDialog.showModal());
-
-// Fermer le formulaire d'ajout
-closeDialog.addEventListener('click', () => addClientDialog.close());
-
-// Ajouter un client
-addClientForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    // Récupérer les données du formulaire
-    const lastName = document.getElementById('lastName').value.trim();
-    const firstName = document.getElementById('firstName').value.trim();
-    const priceType = document.getElementById('priceType').value.trim();
-    const wilaya = document.getElementById('wilaya').value.trim();
-    const description = document.getElementById('description').value.trim() || "";
-
-    // Validation des champs
-    if (!lastName || !firstName || !priceType || !wilaya) {
-        alert('Tous les champs obligatoires doivent être remplis.');
-        return;
-    }
-
-    // Créer un nouveau client
-    const newClient = {
-        id: clientIdCounter++,
-        lastName,
-        firstName,
-        priceType,
-        wilaya,
-        credit: 0,
-        description,
-    };
-
-    clients.push(newClient);
-    saveClientsToLocalStorage();
-    renderClients();
-    addClientDialog.close();
-    addClientForm.reset();
+addClientBtn.addEventListener("click", () => {
+  addClientForm.reset();
+  addClientDialog.showModal();
 });
 
-// Afficher les clients dans le tableau
-function renderClients(filteredClients = clients) {
-    clientTableBody.innerHTML = "";
-    filteredClients.forEach(client => {
-        const row = document.createElement('tr');
-        row.setAttribute('data-id', client.id); // Ajouter un attribut personnalisé pour identifier la ligne
-        row.innerHTML = `
-            <td>${client.id}</td>
-            <td>${client.lastName}</td>
-            <td>${client.firstName}</td>
-            <td>${client.priceType}</td>
-            <td>${client.wilaya}</td>
-            <td>${client.credit} DA</td>
-            <td>${client.description}</td>
-            <td>
-                <button class="edit-btn" onclick="editClient(${client.id})">Modifier</button>
-                <button class="credit-btn" onclick="updateCredit(${client.id})">Crédit</button>
-                <button class="delete-btn" onclick="deleteClient(${client.id})">Supprimer</button>
-            </td>
-        `;
-        clientTableBody.appendChild(row);
-    });
+// Fermer le formulaire d'ajout
+closeAddDialog.addEventListener("click", () => addClientDialog.close());
+
+// Ajouter un nouveau client
+addClientForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const newClient = {
+    id: clientIdCounter++,
+    lastName: document.getElementById("lastName").value.trim(),
+    firstName: document.getElementById("firstName").value.trim(),
+    priceType: document.getElementById("priceType").value.trim(),
+    wilaya: document.getElementById("wilaya").value.trim(),
+    credit: 0,
+    description: document.getElementById("description").value.trim(),
+  };
+
+  clients.push(newClient);
+  saveClientsToLocalStorage();
+  renderClients();
+  addClientDialog.close();
+});
+
+// Ouvrir le formulaire de modification
+function openEditClientDialog(clientId) {
+  const client = clients.find((c) => c.id === clientId);
+  if (!client) return;
+
+  document.getElementById("editLastName").value = client.lastName;
+  document.getElementById("editFirstName").value = client.firstName;
+  document.getElementById("editPriceType").value = client.priceType;
+  document.getElementById("editWilaya").value = client.wilaya;
+  document.getElementById("editDescription").value = client.description;
+
+  editClientForm.dataset.clientId = client.id;
+  editClientDialog.showModal();
 }
 
-// Enregistrer les clients dans le localStorage
-function saveClientsToLocalStorage() {
-    localStorage.setItem('clients', JSON.stringify(clients));
-}
+// Fermer le formulaire de modification
+closeEditDialog.addEventListener("click", () => editClientDialog.close());
 
 // Modifier un client
-function editClient(id) {
-    const client = clients.find(c => c.id === id);
-    if (client) {
-        // Pré-remplir le formulaire avec les données du client
-        document.getElementById('lastName').value = client.lastName;
-        document.getElementById('firstName').value = client.firstName;
-        document.getElementById('priceType').value = client.priceType;
-        document.getElementById('wilaya').value = client.wilaya;
-        document.getElementById('description').value = client.description;
-        addClientDialog.showModal();
+editClientForm.addEventListener("submit", (e) => {
+  e.preventDefault();
 
-        // Mettre à jour le client lors de la soumission du formulaire
-        addClientForm.onsubmit = (e) => {
-            e.preventDefault();
-            updateClientData(client);
-            updateClientRow(client); // Mettre à jour la ligne du tableau avec les nouvelles données
-        };
-    }
-}
+  const clientId = parseInt(editClientForm.dataset.clientId, 10);
+  const client = clients.find((c) => c.id === clientId);
+  if (!client) return;
 
-// Mettre à jour les données d'un client dans le tableau
-function updateClientData(client) {
-    client.lastName = document.getElementById('lastName').value.trim();
-    client.firstName = document.getElementById('firstName').value.trim();
-    client.priceType = document.getElementById('priceType').value.trim();
-    client.wilaya = document.getElementById('wilaya').value.trim();
-    client.description = document.getElementById('description').value.trim();
+  client.lastName = document.getElementById("editLastName").value.trim();
+  client.firstName = document.getElementById("editFirstName").value.trim();
+  client.priceType = document.getElementById("editPriceType").value.trim();
+  client.wilaya = document.getElementById("editWilaya").value.trim();
+  client.description = document.getElementById("editDescription").value.trim();
 
-    saveClientsToLocalStorage();
-}
+  saveClientsToLocalStorage();
+  renderClients();
+  editClientDialog.close();
+});
 
-// Mettre à jour la ligne du client dans le tableau
-function updateClientRow(client) {
-    const clientRow = document.querySelector(`tr[data-id='${client.id}']`);
-    if (clientRow) {
-        clientRow.innerHTML = `
-            <td>${client.id}</td>
-            <td>${client.lastName}</td>
-            <td>${client.firstName}</td>
-            <td>${client.priceType}</td>
-            <td>${client.wilaya}</td>
-            <td>${client.credit} DA</td>
-            <td>${client.description}</td>
-            <td>
-                <button class="edit-btn" onclick="editClient(${client.id})">Modifier</button>
-                <button class="credit-btn" onclick="updateCredit(${client.id})">Crédit</button>
-                <button class="delete-btn" onclick="deleteClient(${client.id})">Supprimer</button>
-            </td>
-        `;
-    }
-    addClientDialog.close();
-    addClientForm.reset();
+// Rendre les clients dans la table
+function renderClients() {
+  clientTableBody.innerHTML = "";
+  clients.forEach((client) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${client.id}</td>
+      <td>${client.lastName}</td>
+      <td>${client.firstName}</td>
+      <td>${client.priceType}</td>
+      <td>${client.wilaya}</td>
+      <td>${client.credit} DA</td>
+      <td>${client.description}</td>
+      <td>
+        <button onclick="openEditClientDialog(${client.id})">Modifier</button>
+        <button onclick="updateCredit(${client.id})">Crédit</button>
+        <button onclick="deleteClient(${client.id})">Supprimer</button>
+      </td>
+    `;
+    clientTableBody.appendChild(row);
+  });
 }
 
 // Supprimer un client
 function deleteClient(id) {
-    if (confirm("Êtes-vous sûr de vouloir supprimer ce client ?")) {
-        clients = clients.filter(client => client.id !== id);
-
-        // Réajuster les IDs des clients restants
-        clients.forEach((client, index) => client.id = index + 1);
-
-        clientIdCounter = clients.length > 0 ? clients[clients.length - 1].id + 1 : 1;
-
-        saveClientsToLocalStorage();
-        renderClients();
-    }
+  if (confirm("Êtes-vous sûr de vouloir supprimer ce client ?")) {
+    clients = clients.filter((c) => c.id !== id);
+    saveClientsToLocalStorage();
+    renderClients();
+  }
 }
+
+// Enregistrer dans le localStorage
+function saveClientsToLocalStorage() {
+  localStorage.setItem("clients", JSON.stringify(clients));
+}
+
 
 // Mettre à jour le crédit d'un client
 function updateCredit(id) {
-    const client = clients.find(c => c.id === id);
-    if (client) {
-        const newCredit = prompt(`Entrez le nouveau crédit pour ${client.lastName} ${client.firstName} :`, client.credit);
-        if (newCredit !== null && !isNaN(newCredit)) {
-            client.credit = parseFloat(newCredit);
-            saveClientsToLocalStorage();
-            renderClients();
-        }
+  const client = clients.find((c) => c.id === id);
+  if (client) {
+    const newCredit = prompt(
+      `Entrez le nouveau crédit pour ${client.lastName} ${client.firstName} :`,
+      client.credit
+    );
+    if (newCredit !== null && !isNaN(newCredit)) {
+      client.credit = parseFloat(newCredit);
+      saveClientsToLocalStorage();
+      renderClients();
     }
+  }
 }
 
 // Rechercher un client par nom
-searchInput.addEventListener('input', () => {
-    const query = searchInput.value.toLowerCase();
-    const filteredClients = clients.filter(client =>
-        client.lastName.toLowerCase().includes(query) ||
-        client.firstName.toLowerCase().includes(query)
-    );
-    renderClients(filteredClients);
+searchInput.addEventListener("input", () => {
+  const query = searchInput.value.toLowerCase();
+  const filteredClients = clients.filter(
+    (client) =>
+      client.lastName.toLowerCase().includes(query) ||
+      client.firstName.toLowerCase().includes(query)
+  );
+  renderClients(filteredClients);
 });
 
 // Charger les clients à l'ouverture
 renderClients();
+saveClientsToLocalStorage();
