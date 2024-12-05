@@ -81,9 +81,9 @@ editClientForm.addEventListener("submit", (e) => {
 });
 
 // Rendre les clients dans la table
-function renderClients() {
+function renderClients(filteredClients = clients) {
   clientTableBody.innerHTML = "";
-  clients.forEach((client) => {
+  filteredClients.forEach((client) => {
     const row = document.createElement("tr");
     row.innerHTML = `
       <td>${client.id}</td>
