@@ -7,6 +7,8 @@ const editClientForm = document.getElementById("editClientForm");
 const addClientBtn = document.getElementById("addClientBtn");
 const closeAddDialog = document.getElementById("closeAddDialog");
 const closeEditDialog = document.getElementById("closeEditDialog");
+const searchInput = document.getElementById("search");
+
 
 let clients = JSON.parse(localStorage.getItem("clients")) || [];
 let clientIdCounter = clients.length > 0 ? clients[clients.length - 1].id + 1 : 1;
@@ -81,7 +83,7 @@ editClientForm.addEventListener("submit", (e) => {
 });
 
 // Rendre les clients dans la table
-function renderClients(filteredClients = clients) {
+function renderClients( filteredClients = clients) {
   clientTableBody.innerHTML = "";
   filteredClients.forEach((client) => {
     const row = document.createElement("tr");
@@ -107,6 +109,10 @@ function renderClients(filteredClients = clients) {
 function deleteClient(id) {
   if (confirm("Êtes-vous sûr de vouloir supprimer ce client ?")) {
     clients = clients.filter((c) => c.id !== id);
+
+    clients.forEach((client, index) => client.id = index + 1); 
+    clientIdCounter = clients.length > 0 ? clients[clients.length - 1].id + 1 : 1;
+    
     saveClientsToLocalStorage();
     renderClients();
   }
