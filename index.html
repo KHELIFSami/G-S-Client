@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G-Stock Pro</title>
+    <title>Client</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Khelif Redhouane El Présidenté</h1>
+        <h1>Khelif Industries</h1>
     </header>
     <main>
         <section class="search-bar">
@@ -18,16 +18,16 @@
             <button id="addClientBtn">Ajouter un Client</button> <br> <br>
             <table>
                 <thead>
-                        <tr>
-                            <th data-column="id">ID</th>
-                            <th data-column="lastName">Nom</th>
-                            <th data-column="firstName">Prénom</th>
-                            <th data-column="priceType">Type de Prix</th>
-                            <th data-column="wilaya">Wilaya</th>
-                            <th data-column="credit">Crédit</th>
-                            <th data-column="description">Description</th>
-                            <th data-column="actions">Actions</th>
-                        </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Type de Prix</th>
+                        <th>Wilaya</th>
+                        <th>Crédit</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
                 </thead>
                 <tbody id="clientTableBody">
                     <!-- Les clients ajoutés seront affichés ici -->
@@ -54,7 +54,30 @@
                 <label for="description">Description</label>
                 <textarea id="description"></textarea>
                 <button type="submit">Ajouter</button>
-                <button type="button" id="closeDialog">Annuler</button>
+                <button type="button" id="closeAddDialog">Annuler</button>
+            </form>
+        </dialog>
+
+        <!-- Dialog pour modifier un client -->
+        <dialog id="editClientDialog">
+            <form id="editClientForm">
+                <h2>Modifier un Client</h2>
+                <label for="editLastName">Nom*</label>
+                <input type="text" id="editLastName" required>
+                <label for="editFirstName">Prénom*</label>
+                <input type="text" id="editFirstName" required>
+                <label for="editPriceType">Type de Prix*</label>
+                <select id="editPriceType" required>
+                    <option value="gros">Gros</option>
+                    <option value="demi-gros">Demi Gros</option>
+                    <option value="detail">Détail</option>
+                </select>
+                <label for="editWilaya">Wilaya*</label>
+                <input type="text" id="editWilaya" required>
+                <label for="editDescription">Description</label>
+                <textarea id="editDescription"></textarea>
+                <button type="submit">Modifier</button>
+                <button type="button" id="closeEditDialog">Annuler</button>
             </form>
         </dialog>
     </main>
